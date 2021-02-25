@@ -1,0 +1,4 @@
+# about model
+WEIGHT_DECAY = 5e-4
+NUM_CLASS = 10
+DROPOUT = 0.
