@@ -1,5 +1,5 @@
 import tensorflow as tf
-
+import tensorflow.keras as keras
 
 if __name__ == '__main__':
-    print('ok')
+    optimizer = keras.optimizers.Adam

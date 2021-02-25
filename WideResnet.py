@@ -23,10 +23,11 @@ class BasicBlock(layers.Layer):
         self.trainable = trainable
 
         self.bn1 = layers.BatchNormalization(
+            momentum=0.001,
             trainable=self.trainable,
             name=name+'_bn1'
         )
-        self.relu1 = layers.ReLU()
+        self.relu1 = layers.LeakyReLU(alpha=0.1)
         self.conv1 = layers.Conv2D(
             filters=self.out_channels,
             kernel_size=3,
@@ -39,10 +40,11 @@ class BasicBlock(layers.Layer):
             name=name+'_conv1',
         )
         self.bn2 = layers.BatchNormalization(
+            momentum=0.001,
             trainable=self.trainable,
             name=name+'_bn2'
         )
-        self.relu2 = layers.ReLU()
+        self.relu2 = layers.LeakyReLU(alpha=0.1)
         self.dropout = layers.Dropout(
             rate=self.dropout,
             trainable=self.trainable,
@@ -71,6 +73,7 @@ class BasicBlock(layers.Layer):
                 trainable=self.trainable,
                 name=name+'_shortcut'
             )
+        self.add = layers.Add(name=name+'_add')
 
     def call(self, inputs, **kwargs):
         out = self.bn1(inputs)
@@ -84,7 +87,7 @@ class BasicBlock(layers.Layer):
             shortcut = self.short_cut(inputs)
         else:
             shortcut = out
-        out = tf.add(shortcut, out)
+        out = self.add([shortcut, out])
         return out
 
 
@@ -124,7 +127,7 @@ class WideResnet(keras.Model):
             trainable=self.trainable,
             name=name+'_bn1'
         )
-        self.relu1 = layers.ReLU(name=name+'_relu1')
+        self.relu1 = layers.LeakyReLU(alpha=0.1)
         self.avgpool = layers.GlobalAveragePooling2D(name=name+'_avgpool')
         self.dense = layers.Dense(
             units=config.NUM_CLASS,
@@ -154,11 +157,12 @@ class WideResnet(keras.Model):
         return out
 
     def model(self):
-        input = keras.Input(shape=[None, 32, 32, 3], dtype=tf.float32)
+        input = keras.Input(shape=(32, 32, 3), dtype=tf.float32)
         return keras.Model(inputs=input, outputs=self.call(input))
 
 
 if __name__ == '__main__':
     img = tf.random.normal([1, 32, 32, 3])
-    model = WideResnet(name='ddd').model()
+    model = WideResnet().model()
     model.summary()
+    # print(len(model.trainable_variables))
