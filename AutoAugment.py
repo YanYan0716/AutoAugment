@@ -199,7 +199,7 @@ def sharpness(img, magnitude):
     return img
 
 
-@tf.function(input_signature=[tf.TensorSpec(shape=[None, None, None], dtype=tf.float32)])
+# @tf.function(input_signature=[tf.TensorSpec(shape=[None, None, None], dtype=tf.float32)])
 def cutout(org_img, magnitude=None):
     magnitudes = np.linspace(0, 60/331, 11)
 

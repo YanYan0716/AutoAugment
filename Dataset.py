@@ -46,9 +46,10 @@ class DataAugment(object):
                 ['TranslateY', 0.7, 9, 'AutoContrast', 0.9, 1],
             ]
 
+    @tf.function(input_signature=[tf.TensorSpec(shape=[None, None, None], dtype=tf.float32)])
     def augment(self, img):
         if self.cutout:
-            img = tf.numpy_function(cutout, [img], tf.float32)
+            img = cutout(img)
         if self.auto_augment:
             img = img.astype('uint8')
             img = apply_policy(img, self.policies[random.randrange(len(self.policies))])
@@ -72,7 +73,7 @@ def label_image(img_file, label):
     img = tf.image.random_crop(img, (config.IMG_SIZE, config.IMG_SIZE, 3))
     # img = img.numpy()
     aug = DataAugment()
-    img = aug.augment(img)
+    img = tf.numpy_function(aug.augment, [img], tf.float32)
     img = tf.convert_to_tensor(img, dtype=tf.float32)
 
     img = tf.cast(img, config.DTYPE) / 255.0
