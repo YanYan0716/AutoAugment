@@ -8,7 +8,7 @@ import pandas as pd
 
 import config
 from WideResnet import WideResnet
-from Dataset import train_aug
+from Dataset import train_aug, test_aug
 from CosineLR import CosineLR
 from train_loop import train_loop
 from train_loop import test_loop
@@ -22,7 +22,8 @@ if __name__ == '__main__':
     labels = train_csv['label'].values
     ds_train = tf.data.Dataset.from_tensor_slices((file_paths, labels))
     ds_train = ds_train \
-        .map(train_aug, num_parallel_calls=AUTOTUNE) \
+        .map(train_aug, num_parallel_calls=AUTOTUNE)\
+        .cache() \
         .batch(config.BATCH_SIZE, drop_remainder=True) \
         .shuffle(buffer_size=50000)\
         .prefetch(AUTOTUNE)
@@ -32,7 +33,8 @@ if __name__ == '__main__':
     labels = test_csv['label'].values
     ds_test = tf.data.Dataset.from_tensor_slices((file_paths, labels))
     ds_test = ds_test \
-        .map(train_aug, num_parallel_calls=AUTOTUNE) \
+        .map(test_aug, num_parallel_calls=AUTOTUNE)\
+        .cache() \
         .batch(config.BATCH_SIZE, drop_remainder=True) \
         .shuffle(buffer_size=10000)\
         .prefetch(AUTOTUNE)
