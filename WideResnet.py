@@ -27,7 +27,8 @@ class BasicBlock(layers.Layer):
             trainable=self.trainable,
             name=name+'_bn1'
         )
-        self.relu1 = layers.LeakyReLU(alpha=0.1)
+        # self.relu1 = layers.LeakyReLU(alpha=0.1)
+        self.relu1 = layers.ReLU()
         self.conv1 = layers.Conv2D(
             filters=self.out_channels,
             kernel_size=3,
@@ -40,11 +41,11 @@ class BasicBlock(layers.Layer):
             name=name+'_conv1',
         )
         self.bn2 = layers.BatchNormalization(
-            momentum=0.001,
+            # momentum=0.001,
             trainable=self.trainable,
             name=name+'_bn2'
         )
-        self.relu2 = layers.LeakyReLU(alpha=0.1)
+        self.relu2 = layers.ReLU() #layers.LeakyReLU(alpha=0.1)
         self.dropout = layers.Dropout(
             rate=self.dropout,
             trainable=self.trainable,
@@ -127,7 +128,8 @@ class WideResnet(keras.Model):
             trainable=self.trainable,
             name=name+'_bn1'
         )
-        self.relu1 = layers.LeakyReLU(alpha=0.1)
+        # self.relu1 = layers.LeakyReLU(alpha=0.1)
+        self.relu1 = layers.ReLU()
         self.avgpool = layers.GlobalAveragePooling2D(name=name+'_avgpool')
         self.dense = layers.Dense(
             units=config.NUM_CLASS,
