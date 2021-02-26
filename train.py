@@ -65,7 +65,7 @@ if __name__ == '__main__':
             Loss=loss_fun,
             acc_metric=train_acc_metric,
         )
-        print(f'train epoch: {i} -->  acc: {train_acc}, loss: {loss}. lr: {coslr}')
+        print(f'train epoch: {i} -->  acc: {train_acc}, loss: {loss}. lr: {coslr.__call__(i)}')
         if (i+1) % config.EVA_EPOCH == 0:
             test_acc = test_loop(
                 dataset=ds_test,
