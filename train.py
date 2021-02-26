@@ -53,6 +53,7 @@ if __name__ == '__main__':
 
     # train and test
     best_acc = 0
+    print('training')
     for i in range(config.MAX_EPOCH):
         coslr = CosineLR(T_max=config.MAX_EPOCH, eta_max=config.ETA_MAX, eta_min=config.ETA_MIN)
         model, loss, train_acc = train_loop(
@@ -64,11 +65,13 @@ if __name__ == '__main__':
             Loss=loss_fun,
             acc_metric=train_acc_metric,
         )
+        print(f'train epoch: {i} -->  acc: {train_acc}, loss: {loss}')
         if (i+1) % config.EVA_EPOCH == 0:
             test_acc = test_loop(
                 dataset=ds_test,
                 model=model,
                 acc_metric=test_acc_metric,
             )
+            print(f'test ---------->  acc: {test_acc}')
             if test_acc > best_acc:
                 model.save(config.SAVE_PATH+'_'+str(i))
