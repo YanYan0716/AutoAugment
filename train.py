@@ -47,7 +47,7 @@ if __name__ == '__main__':
     optimizer = keras.optimizers.SGD
 
     # loss
-    loss_fun = keras.losses.SparseCategoricalCrossentropy(from_logits=False)
+    loss_fun = keras.losses.SparseCategoricalCrossentropy(from_logits=True)
     train_acc_metric = keras.metrics.SparseCategoricalAccuracy()
     test_acc_metric = keras.metrics.SparseCategoricalAccuracy()
 
