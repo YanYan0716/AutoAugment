@@ -24,8 +24,47 @@ operations = {
     'Cutout': lambda img, magnitude: cutout(img, magnitude),
 }
 
+policies = [
+    ['Invert', 0.1, 7, 'Contrast', 0.2, 6],
+    ['Rotate', 0.7, 2, 'TranslateX', 0.3, 9],
+    ['Sharpness', 0.8, 1, 'Sharpness', 0.9, 3],
+    ['ShearY', 0.5, 8, 'TranslateY', 0.7, 9],
+    ['AutoContrast', 0.5, 8, 'Equalize', 0.9, 2],
+    ['ShearY', 0.2, 7, 'Posterize', 0.3, 7],
+    ['Color', 0.4, 3, 'Brightness', 0.6, 7],
+    ['Sharpness', 0.3, 9, 'Brightness', 0.7, 9],
+    ['Equalize', 0.6, 5, 'Equalize', 0.5, 1],
+    ['Contrast', 0.6, 7, 'Sharpness', 0.6, 5],
+    ['Color', 0.7, 7, 'TranslateX', 0.5, 8],
+    ['Equalize', 0.3, 7, 'AutoContrast', 0.4, 8],
+    ['TranslateY', 0.4, 3, 'Sharpness', 0.2, 6],
+    ['Brightness', 0.9, 6, 'Color', 0.2, 8],
+    ['Solarize', 0.5, 2, 'Invert', 0, 0.3],
+    ['Equalize', 0.2, 0, 'AutoContrast', 0.6, 0],
+    ['Equalize', 0.2, 8, 'Equalize', 0.6, 4],
+    ['Color', 0.9, 9, 'Equalize', 0.6, 6],
+    ['AutoContrast', 0.8, 4, 'Solarize', 0.2, 8],
+    ['Brightness', 0.1, 3, 'Color', 0.7, 0],
+    ['Solarize', 0.4, 5, 'AutoContrast', 0.9, 3],
+    ['TranslateY', 0.9, 9, 'TranslateY', 0.7, 9],
+    ['AutoContrast', 0.9, 2, 'Solarize', 0.8, 3],
+    ['Equalize', 0.8, 8, 'Invert', 0.1, 3],
+    ['TranslateY', 0.7, 9, 'AutoContrast', 0.9, 1],
+]
 
-def apply_policy(img, policy):
+
+@tf.function(input_signature=[tf.TensorSpec(shape=[None, None, None], dtype=tf.float32)])
+def tfapply_policy(org_img):
+    img = tf.numpy_function(apply_policy, [org_img], tf.float32)
+    return img
+
+
+def apply_policy(img):
+    policy = policies[random.randrange(len(policies))]
+    # print(policy)
+    # # print(policy[2])
+    # print(type(img))
+    # img = operations['Color'](img, 7)
     if random.random() < policy[1]:
         img = operations[policy[0]](img, policy[2])
     if random.random() < policy[4]:
@@ -125,82 +164,84 @@ def rotate(img, magnitude):
 
 
 def auto_contrast(img, magnitude):
+    img = np.uint8(np.clip(img, 0., 255.))
     img = Image.fromarray(img)
     img = ImageOps.autocontrast(img)
-    img = np.array(img)
+    img = np.float32(np.array(img))
     return img
 
 
 def invert(img, magnitude):
+    img = np.uint8(np.clip(img, 0., 255.))
     img = Image.fromarray(img)
     img = ImageOps.invert(img)
-    img = np.array(img)
+    img = np.float32(np.array(img))
     return img
 
 
 def equalize(img, magnitude):
+    img = np.uint8(np.clip(img, 0., 255.))
     img = Image.fromarray(img)
     img = ImageOps.equalize(img)
-    img = np.array(img)
+    img = np.float32(np.array(img))
     return img
 
 
 def solarize(img, magnitude):
     magnitudes = np.linspace(0, 256, 11)
-
+    img = np.uint8(np.clip(img, 0., 255.))
     img = Image.fromarray(img)
     img = ImageOps.solarize(img, random.uniform(magnitudes[magnitude], magnitudes[magnitude+1]))
-    img = np.array(img)
+    img = np.float32(np.array(img))
     return img
 
 
 def posterize(img, magnitude):
     magnitudes = np.linspace(4, 8, 11)
-
+    img = np.uint8(np.clip(img, 0., 255.))
     img = Image.fromarray(img)
     img = ImageOps.posterize(img, int(round(random.uniform(magnitudes[magnitude], magnitudes[magnitude+1]))))
-    img = np.array(img)
+    img = np.float32(np.array(img))
     return img
 
 
 def contrast(img, magnitude):
     magnitudes = np.linspace(0.1, 1.9, 11)
-
+    img = np.uint8(np.clip(img, 0., 255.))
     img = Image.fromarray(img)
     img = ImageEnhance.Contrast(img).enhance(random.uniform(magnitudes[magnitude], magnitudes[magnitude+1]))
-    img = np.array(img)
+    img = np.float32(np.array(img))
     return img
 
 
 def color(img, magnitude):
     magnitudes = np.linspace(0.1, 1.9, 11)
-
+    img = np.uint8(np.clip(img, 0., 255.))
     img = Image.fromarray(img)
     img = ImageEnhance.Color(img).enhance(random.uniform(magnitudes[magnitude], magnitudes[magnitude+1]))
-    img = np.array(img)
+    img = np.float32(np.array(img))
     return img
 
 
 def brightness(img, magnitude):
     magnitudes = np.linspace(0.1, 1.9, 11)
-
+    img = np.uint8(np.clip(img, 0., 255.))
     img = Image.fromarray(img)
     img = ImageEnhance.Brightness(img).enhance(random.uniform(magnitudes[magnitude], magnitudes[magnitude+1]))
-    img = np.array(img)
+    img = np.float32(np.array(img))
     return img
 
 
 def sharpness(img, magnitude):
     magnitudes = np.linspace(0.1, 1.9, 11)
-
+    img = np.uint8(np.clip(img, 0., 255.))
     img = Image.fromarray(img)
     img = ImageEnhance.Sharpness(img).enhance(random.uniform(magnitudes[magnitude], magnitudes[magnitude+1]))
-    img = np.array(img)
+    img = np.float32(np.array(img))
     return img
 
 
-# @tf.function(input_signature=[tf.TensorSpec(shape=[None, None, None], dtype=tf.float32)])
-def cutout(org_img, magnitude=None):
+def cutout(org_img, magnitude=config.MAGNITUDES):
     magnitudes = np.linspace(0, 60/331, 11)
 
     img = np.copy(org_img)
@@ -222,6 +263,12 @@ def cutout(org_img, magnitude=None):
 
     img[top:bottom, left:right, :].fill(mask_val)
 
+    return img
+
+
+@tf.function(input_signature=[tf.TensorSpec(shape=[None, None, None], dtype=tf.float32)])
+def tfcutout(org_img):
+    img = tf.numpy_function(cutout, [org_img], tf.float32)
     return img
 
 

@@ -5,8 +5,10 @@ NUM_CLASS = 10
 DROPOUT = 0.
 
 # about dataset
-MAGNITUDES = 3
+MAGNITUDES = None
 IMG_SIZE = 32
+AUTO_AUGMENT = True
+CUTOUT = True
 
 
 
