@@ -31,8 +31,8 @@ def train_aug(img_file, label):
     img = (img-mean)/(std+(1e-6))
 
     # 对标签的处理
-    # label = tf.raw_ops.OneHot(indices=label, depth=config.NUM_CLASS, on_value=1.0, off_value=0)
-    # label = tf.cast(label, dtype=config.DTYPE)
+    label = tf.raw_ops.OneHot(indices=label, depth=config.NUM_CLASS, on_value=1.0, off_value=0)
+    label = tf.cast(label, dtype=config.DTYPE)
     return img, label
 
 
@@ -47,8 +47,8 @@ def test_aug(img_file, label):
     img = (img-mean)/(std+(1e-6))
 
     # 对标签的处理
-    # label = tf.raw_ops.OneHot(indices=label, depth=config.NUM_CLASS, on_value=1.0, off_value=0)
-    # label = tf.cast(label, dtype=config.DTYPE)
+    label = tf.raw_ops.OneHot(indices=label, depth=config.NUM_CLASS, on_value=1.0, off_value=0)
+    label = tf.cast(label, dtype=config.DTYPE)
     return img, label
 
 
