@@ -1,3 +1,6 @@
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 import tensorflow as tf
 import tensorflow.keras as keras
 import pandas as pd
@@ -39,10 +42,7 @@ if __name__ == '__main__':
     model = WideResnet(k).model()
 
     # optimizer
-    optimizer = keras.optimizers.SGD(
-        learning_rate=config.LEARNING_RATE,
-        momentum=config.MOMENTUM,
-    )
+    optimizer = keras.optimizers.SGD
 
     # loss
     loss_fun = keras.losses.SparseCategoricalCrossentropy(from_logits=False)

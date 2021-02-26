@@ -1,5 +1,6 @@
 import tensorflow as tf
 
+import config
 
 def train_loop(dataset, model, coslr, global_step, optimizer, Loss, acc_metric):
     loss_mean = 0
@@ -10,7 +11,7 @@ def train_loop(dataset, model, coslr, global_step, optimizer, Loss, acc_metric):
             loss_mean += loss
         grad = tape.gradient(loss, model.trainable_weights)
         lr = coslr.__call__(global_step)
-        optimizer(lr=lr).apply_gradients(zip(grad, model.trainable_weights))
+        optimizer(lr, config.MOMENTUM).apply_gradients(zip(grad, model.trainable_weights))
         acc_metric.update_state(y_pred, label)
     train_acc = acc_metric.result()
     loss_mean = loss_mean / batch_idx

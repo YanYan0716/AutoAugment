@@ -7,8 +7,8 @@ WIDTH = 10
 DEPTH = 26
 
 # about dataset
-TRAIN_FILE_PATH = '../input/cifar10/cifar/train.csv'
-TEST_FILE_PATH = '../input/cifar10/cifar/test.csv'
+TRAIN_FILE_PATH = '/content/cifar/train.csv'
+TEST_FILE_PATH = '/content/cifar/test.csv'
 MAGNITUDES = None
 IMG_SIZE = 32
 AUTO_AUGMENT = True
