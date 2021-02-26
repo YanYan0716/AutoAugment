@@ -13,15 +13,8 @@ import matplotlib.pyplot as plt
 import config
 
 
-# 制作有标签的数据集
-def label_image(img_file, label):
-    '''
-    获取图片，对图片做水平翻转 随机剪裁等， label变为onehot
-    :param img_file:
-    :param label:
-    :return:
-    '''
-    # 对图片的处理
+# 数据集
+def train_aug(img_file, label):
     img = tf.io.read_file(img_file)
     img = tf.image.decode_jpeg(img, channels=3)
     img = tf.image.random_flip_left_right(img)
@@ -33,14 +26,30 @@ def label_image(img_file, label):
         img = tfapply_policy(img)
 
     img = tf.cast(img, config.DTYPE) / 255.0
-    # mean = tf.expand_dims(tf.convert_to_tensor([0.4914, 0.4822, 0.4465], dtype=config.DTYPE), axis=0)
-    # std = tf.expand_dims(tf.convert_to_tensor([0.2471, 0.2435, 0.2616], dtype=config.DTYPE), axis=0)
-    # img = (img-mean)/std+(1e-6)
+    mean = tf.expand_dims(tf.convert_to_tensor([0.4914, 0.4822, 0.4465], dtype=config.DTYPE), axis=0)
+    std = tf.expand_dims(tf.convert_to_tensor([0.2471, 0.2435, 0.2616], dtype=config.DTYPE), axis=0)
+    img = (img-mean)/(std+(1e-6))
 
     # 对标签的处理
-    label = tf.raw_ops.OneHot(indices=label, depth=config.NUM_CLASS, on_value=1.0, off_value=0)
+    # label = tf.raw_ops.OneHot(indices=label, depth=config.NUM_CLASS, on_value=1.0, off_value=0)
     label = tf.cast(label, dtype=config.DTYPE)
-    return {'images': img, 'labels': label}
+    return (img, label)
+
+
+def test_aug(img_file, label):
+    img = tf.io.read_file(img_file)
+    img = tf.image.decode_jpeg(img, channels=3)
+    img = tf.image.random_flip_left_right(img)
+    img = tf.image.resize(img, (config.IMG_SIZE, config.IMG_SIZE))
+    img = tf.cast(img, config.DTYPE) / 255.0
+    mean = tf.expand_dims(tf.convert_to_tensor([0.4914, 0.4822, 0.4465], dtype=config.DTYPE), axis=0)
+    std = tf.expand_dims(tf.convert_to_tensor([0.2471, 0.2435, 0.2616], dtype=config.DTYPE), axis=0)
+    img = (img-mean)/(std+(1e-6))
+
+    # 对标签的处理
+    # label = tf.raw_ops.OneHot(indices=label, depth=config.NUM_CLASS, on_value=1.0, off_value=0)
+    label = tf.cast(label, dtype=config.DTYPE)
+    return (img, label)
 
 
 if __name__ == '__main__':
