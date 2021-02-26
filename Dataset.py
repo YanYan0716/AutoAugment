@@ -32,8 +32,8 @@ def train_aug(img_file, label):
 
     # 对标签的处理
     # label = tf.raw_ops.OneHot(indices=label, depth=config.NUM_CLASS, on_value=1.0, off_value=0)
-    label = tf.cast(label, dtype=config.DTYPE)
-    return (img, label)
+    # label = tf.cast(label, dtype=config.DTYPE)
+    return img, label
 
 
 def test_aug(img_file, label):
@@ -48,8 +48,8 @@ def test_aug(img_file, label):
 
     # 对标签的处理
     # label = tf.raw_ops.OneHot(indices=label, depth=config.NUM_CLASS, on_value=1.0, off_value=0)
-    label = tf.cast(label, dtype=config.DTYPE)
-    return (img, label)
+    # label = tf.cast(label, dtype=config.DTYPE)
+    return img, label
 
 
 if __name__ == '__main__':
@@ -62,12 +62,12 @@ if __name__ == '__main__':
     labels = df_label['label'].values
     ds_label_train = tf.data.Dataset.from_tensor_slices((file_paths, labels))
     ds_label_train = ds_label_train\
-        .map(label_image, num_parallel_calls=AUTOTUNE)\
-        .batch(1).shuffle(1)
-    for data in ds_label_train:
-        plt.imshow(data['images'][0])
-        plt.axis('off')
-        plt.show()
-        print(data['labels'])
+        .map(train_aug, num_parallel_calls=AUTOTUNE)\
+        .batch(2).shuffle(1)
+    for (data, label) in ds_label_train:
+        # plt.imshow(data[0])
+        # plt.axis('off')
+        # plt.show()
+        print(label)
         break
 
