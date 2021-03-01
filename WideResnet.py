@@ -168,5 +168,6 @@ class WideResnet(keras.Model):
 if __name__ == '__main__':
     img = tf.random.normal([1, 32, 32, 3])
     model = WideResnet().model()
+    model.trainable_variables
     model.summary()
     # print(len(model.trainable_variables))
