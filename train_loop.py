@@ -2,6 +2,7 @@ import tensorflow as tf
 
 import config
 
+
 def train_loop(dataset, model, coslr, global_step, optimizer, Loss, acc_metric):
     loss_mean = 0
     for batch_idx, (img, label) in enumerate(dataset):

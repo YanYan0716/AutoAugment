@@ -19,7 +19,7 @@ BATCH_SIZE = 128
 MAX_EPOCH = 200
 LEARNING_RATE = 0.1
 MOMENTUM = 0.9
-EVA_EPOCH = 10
+EVA_EPOCH = 1
 SAVE_PATH = './weights/model' # save path
 
 # about learning rate
