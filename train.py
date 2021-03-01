@@ -37,7 +37,6 @@ if __name__ == '__main__':
         .map(test_aug, num_parallel_calls=AUTOTUNE)\
         .cache() \
         .batch(config.BATCH_SIZE, drop_remainder=True) \
-        .shuffle(buffer_size=10000)\
         .prefetch(AUTOTUNE)
 
     # create model
