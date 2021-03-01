@@ -54,7 +54,7 @@ if __name__ == '__main__':
     train_acc_metric = keras.metrics.CategoricalAccuracy()
     test_acc_metric = keras.metrics.CategoricalAccuracy()
 
-    # train and test
+    # train and test...
     best_acc = 0
     print('training')
     for i in range(config.MAX_EPOCH):
