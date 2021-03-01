@@ -51,8 +51,8 @@ if __name__ == '__main__':
         from_logits=False,
         label_smoothing=0.
     )
-    train_acc_metric = keras.metrics.SparseCategoricalAccuracy()
-    test_acc_metric = keras.metrics.SparseCategoricalAccuracy()
+    train_acc_metric = keras.metrics.CategoricalAccuracy()
+    test_acc_metric = keras.metrics.CategoricalAccuracy()
 
     # train and test
     best_acc = 0
