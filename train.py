@@ -56,7 +56,7 @@ if __name__ == '__main__':
     # test_acc_metric = keras.metrics.CategoricalAccuracy()
 
     mycallbacks = [
-        ModelCheckpoint('./models/checkpoint', save_weights_only=True, save_best_only=True)
+        ModelCheckpoint('./models/checkpoint', save_weights_only=True, save_best_only=True),
         CosineAnnealingScheduler(T_max=config.MAX_EPOCH, eta_max=config.ETA_MAX, eta_min=config.ETA_MIN)
     ]
 
