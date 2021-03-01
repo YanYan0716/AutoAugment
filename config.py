@@ -3,7 +3,7 @@ import tensorflow as tf
 WEIGHT_DECAY = 5e-4
 NUM_CLASS = 10
 DROPOUT = 0.3
-WIDTH = 2
+WIDTH = 10
 DEPTH = 28
 
 # about dataset
