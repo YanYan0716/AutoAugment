@@ -60,13 +60,13 @@ if __name__ == '__main__':
     ]
 
     model.compile(
-        loss='categorical_crossentropy',
+        loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
         optimizer=keras.optimizers.SGD(lr=config.LEARNING_RATE, momentum=config.MOMENTUM),
         metrics=['accuracy']
     )
 
-    model.fit(ds_train, epochs=config.MAX_EPOCH, verbose=1, callbacks=mycallbacks,
-              validation_data=ds_test, shuffle=True, validation_freq=1)
+    model.fit(ds_train, epochs=config.MAX_EPOCH, verbose=2, callbacks=mycallbacks,
+              validation_data=ds_test, shuffle=True)
 
     # # train and test...
     # best_acc = 0
