@@ -4,12 +4,13 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import tensorflow as tf
 import tensorflow.keras as keras
 import pandas as pd
+from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
 
 
 import config
 from WideResnet import WideResnet
 from Dataset import train_aug, test_aug
-from CosineLR import CosineLR
+from CosineLR import CosineLR, CosineAnnealingScheduler
 from train_loop import train_loop
 from train_loop import test_loop
 
@@ -43,38 +44,52 @@ if __name__ == '__main__':
     k = [16, 16 * config.WIDTH, 64 * config.WIDTH, 64 * config.WIDTH]
     model = WideResnet(k).model()
 
-    # optimizer
-    optimizer = keras.optimizers.SGD
+    # # optimizer
+    # optimizer = keras.optimizers.SGD
+    #
+    # # loss
+    # loss_fun = keras.losses.CategoricalCrossentropy(
+    #     from_logits=False,
+    #     label_smoothing=0.
+    # )
+    # train_acc_metric = keras.metrics.CategoricalAccuracy()
+    # test_acc_metric = keras.metrics.CategoricalAccuracy()
 
-    # loss
-    loss_fun = keras.losses.CategoricalCrossentropy(
-        from_logits=False,
-        label_smoothing=0.
+    mycallbacks = [
+        ModelCheckpoint('./models/checkpoint', save_weights_only=True, save_best_only=True)
+        CosineAnnealingScheduler(T_max=config.MAX_EPOCH, eta_max=config.ETA_MAX, eta_min=config.ETA_MIN)
+    ]
+
+    model.compile(
+        loss='categorical_crossentropy',
+        optimizer=keras.optimizers.SGD(lr=config.LEARNING_RATE, momentum=config.MOMENTUM),
+        metrics=['accuracy']
     )
-    train_acc_metric = keras.metrics.CategoricalAccuracy()
-    test_acc_metric = keras.metrics.CategoricalAccuracy()
 
-    # train and test...
-    best_acc = 0
-    print('training')
-    for i in range(config.MAX_EPOCH):
-        coslr = CosineLR(T_max=config.MAX_EPOCH, eta_max=config.ETA_MAX, eta_min=config.ETA_MIN)
-        model, loss, train_acc = train_loop(
-            dataset=ds_train,
-            model=model,
-            coslr=coslr,
-            global_step=i,
-            optimizer=optimizer,
-            Loss=loss_fun,
-            acc_metric=train_acc_metric,
-        )
-        print(f'train epoch: {i} -->  acc: {train_acc}, loss: {loss}. lr: {coslr.__call__(i)}')
-        if (i+1) % config.EVA_EPOCH == 0:
-            test_acc = test_loop(
-                dataset=ds_test,
-                model=model,
-                acc_metric=test_acc_metric,
-            )
-            print(f'test ---------->  acc: {test_acc}')
-            if test_acc > best_acc:
-                model.save(config.SAVE_PATH+'_'+str(i))
+    model.fit(ds_train, epochs=config.MAX_EPOCH, verbose=1, callbacks=mycallbacks,
+              validation_data=ds_test, shuffle=True, validation_freq=1)
+
+    # # train and test...
+    # best_acc = 0
+    # print('training')
+    # for i in range(config.MAX_EPOCH):
+    #     coslr = CosineLR(T_max=config.MAX_EPOCH, eta_max=config.ETA_MAX, eta_min=config.ETA_MIN)
+    #     model, loss, train_acc = train_loop(
+    #         dataset=ds_train,
+    #         model=model,
+    #         coslr=coslr,
+    #         global_step=i,
+    #         optimizer=optimizer,
+    #         Loss=loss_fun,
+    #         acc_metric=train_acc_metric,
+    #     )
+    #     print(f'train epoch: {i} -->  acc: {train_acc}, loss: {loss}. lr: {coslr.__call__(i)}')
+    #     if (i+1) % config.EVA_EPOCH == 0:
+    #         test_acc = test_loop(
+    #             dataset=ds_test,
+    #             model=model,
+    #             acc_metric=test_acc_metric,
+    #         )
+    #         print(f'test ---------->  acc: {test_acc}')
+    #         if test_acc > best_acc:
+    #             model.save(config.SAVE_PATH+'_'+str(i))
