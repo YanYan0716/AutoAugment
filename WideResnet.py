@@ -46,7 +46,7 @@ class BasicBlock(layers.Layer):
             name=name+'_bn2'
         )
         self.relu2 = keras.activations.relu #layers.LeakyReLU(alpha=0.1)
-        self.dropout = layers.Dropout(
+        self.drop_layer = layers.Dropout(
             rate=self.dropout,
             trainable=self.trainable,
             name=name+'_dropout',
@@ -82,6 +82,7 @@ class BasicBlock(layers.Layer):
         out = self.conv1(out)
         out = self.bn2(out)
         out = self.relu2(out)
+        out = self.drop_layer(out)
         out = self.conv2(out)
 
         if self.stride != 1 or self.in_channels != self.out_channels:
