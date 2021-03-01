@@ -20,7 +20,7 @@ MAX_EPOCH = 200
 LEARNING_RATE = 0.1
 MOMENTUM = 0.9
 EVA_EPOCH = 10
-SAVE_PATH = './weights/' # save path
+SAVE_PATH = './weights/model' # save path
 
 # about learning rate
 ETA_MAX = 0.05
