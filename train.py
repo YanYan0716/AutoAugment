@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
     mycallbacks = [
         ModelCheckpoint('./models/checkpoint', save_weights_only=True, save_best_only=True),
-        CosineAnnealingScheduler(T_max=config.MAX_EPOCH, eta_max=config.ETA_MAX, eta_min=config.ETA_MIN, verbose=0)
+        CosineAnnealingScheduler(T_max=config.MAX_EPOCH, eta_max=config.ETA_MAX, eta_min=config.ETA_MIN, verbose=1)
     ]
 
     model.compile(
@@ -92,3 +92,4 @@ if __name__ == '__main__':
     #         print(f'test ---------->  acc: {test_acc}')
     #         if test_acc > best_acc:
     #             model.save(config.SAVE_PATH+'_'+str(i))
+    #
