@@ -26,9 +26,9 @@ def train_aug(img_file, label):
         img = tfapply_policy(img)
 
     img = tf.cast(img, config.DTYPE) / 255.0
-    # mean = tf.expand_dims(tf.convert_to_tensor([0.4914, 0.4822, 0.4465], dtype=config.DTYPE), axis=0)
-    # std = tf.expand_dims(tf.convert_to_tensor([0.2471, 0.2435, 0.2616], dtype=config.DTYPE), axis=0)
-    # img = (img-mean)/(std+(1e-6))
+    mean = tf.expand_dims(tf.convert_to_tensor([0.4914, 0.4822, 0.4465], dtype=config.DTYPE), axis=0)
+    std = tf.expand_dims(tf.convert_to_tensor([0.2471, 0.2435, 0.2616], dtype=config.DTYPE), axis=0)
+    img = (img-mean)/(std+(1e-6))
 
     # 对标签的处理
     # label = tf.raw_ops.OneHot(indices=label, depth=config.NUM_CLASS, on_value=1.0, off_value=0)
@@ -41,9 +41,9 @@ def test_aug(img_file, label):
     img = tf.image.decode_jpeg(img, channels=3)
     img = tf.image.resize(img, (config.IMG_SIZE, config.IMG_SIZE))
     img = tf.cast(img, config.DTYPE) / 255.0
-    # mean = tf.expand_dims(tf.convert_to_tensor([0.4914, 0.4822, 0.4465], dtype=config.DTYPE), axis=0)
-    # std = tf.expand_dims(tf.convert_to_tensor([0.2471, 0.2435, 0.2616], dtype=config.DTYPE), axis=0)
-    # img = (img-mean)/(std+(1e-6))
+    mean = tf.expand_dims(tf.convert_to_tensor([0.4914, 0.4822, 0.4465], dtype=config.DTYPE), axis=0)
+    std = tf.expand_dims(tf.convert_to_tensor([0.2471, 0.2435, 0.2616], dtype=config.DTYPE), axis=0)
+    img = (img-mean)/(std+(1e-6))
 
     # 对标签的处理
     # label = tf.raw_ops.OneHot(indices=label, depth=config.NUM_CLASS, on_value=1.0, off_value=0)
