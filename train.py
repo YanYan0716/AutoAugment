@@ -60,7 +60,7 @@ if __name__ == '__main__':
     ]
 
     model.compile(
-        loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        loss=keras.losses.SparseCategoricalCrossentropy(from_logits=False),
         optimizer=keras.optimizers.SGD(lr=config.LEARNING_RATE, momentum=config.MOMENTUM),
         metrics=['accuracy']
     )
