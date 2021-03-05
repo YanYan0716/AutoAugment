@@ -33,3 +33,10 @@ class CosineAnnealingScheduler(callbacks.Callback):
         if self.verbose > 0:
             print('\nEpoch %05d: CosineAnnealingScheduler setting learning '
                   'rate to %s.' % (epoch + 1, lr))
+
+
+if __name__ == '__main__':
+    import config
+    for i in range(config.MAX_EPOCH):
+        coslr = CosineLR(T_max=config.MAX_EPOCH, eta_max=config.ETA_MAX, eta_min=config.ETA_MIN)
+        print(f'train epoch: {i} -->  lr: {coslr.__call__(i)}')
