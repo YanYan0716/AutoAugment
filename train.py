@@ -19,14 +19,14 @@ if __name__ == '__main__':
     AUTOTUNE = tf.data.experimental.AUTOTUNE
     # train dataset
     train_csv = pd.read_csv(config.TRAIN_FILE_PATH)
-    file_paths = train_csv['name'].values
+    file_paths = train_csv['file_name'].values
     labels = train_csv['label'].values
     ds_train = tf.data.Dataset.from_tensor_slices((file_paths, labels))
     ds_train = ds_train \
         .map(train_aug, num_parallel_calls=AUTOTUNE)\
         .cache() \
         .batch(config.BATCH_SIZE, drop_remainder=True) \
-        .shuffle(buffer_size=50000)\
+        .shuffle(buffer_size=46000)\
         .prefetch(AUTOTUNE)
     # test dataset
     test_csv = pd.read_csv(config.TEST_FILE_PATH)
